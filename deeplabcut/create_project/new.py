@@ -16,7 +16,7 @@ import warnings
 from pathlib import Path
 from deeplabcut import DEBUG
 from deeplabcut.utils.auxfun_videos import VideoReader
-
+from deeplabcut.utils import auxiliaryfunctions
 
 def create_new_project(
     project,
@@ -118,7 +118,7 @@ def create_new_project(
     d = str(month[0:3] + str(day))
     date = dt.today().strftime("%Y-%m-%d")
     if working_directory is None:
-        working_directory = "."
+        working_directory = os.getcwd()
     wd = Path(working_directory).resolve()
     project_name = "{pn}-{exp}-{date}".format(pn=project, exp=experimenter, date=date)
     project_path = wd / project_name
@@ -167,7 +167,7 @@ def create_new_project(
     dirs = [data_path / Path(i.stem) for i in videos]
     for p in dirs:
         """
-        Creates directory under data
+        Creates directory under labeled-data
         """
         p.mkdir(parents=True, exist_ok=True)
 
@@ -207,6 +207,7 @@ def create_new_project(
 
         try:
             vid = VideoReader(rel_video_path)
+            rel_video_path = auxiliaryfunctions.relative_to_project(project_path, rel_video_path)
             video_sets[rel_video_path] = {"crop": ", ".join(map(str, vid.get_bbox()))}
         except IOError:
             warnings.warn("Cannot open the video file! Skipping to the next one...")

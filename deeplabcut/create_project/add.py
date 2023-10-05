@@ -50,7 +50,7 @@ def add_new_videos(
     import shutil
     from pathlib import Path
 
-    from deeplabcut.utils import auxiliaryfunctions, project
+    from deeplabcut.utils import auxiliaryfunctions
     from deeplabcut.utils.auxfun_videos import VideoReader
     from deeplabcut.generate_training_dataset import frame_extraction
 

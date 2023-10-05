@@ -14,7 +14,6 @@ from PySide6 import QtWidgets, QtCore
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QCheckBox
 
-
 class OpenProject(QtWidgets.QDialog):
     def __init__(self, parent):
         super(OpenProject, self).__init__(parent)
@@ -68,6 +67,7 @@ class OpenProject(QtWidgets.QDialog):
         self.config = config[0]
         self.open_line.setText(self.config)
         self.ok_button.setFocus()
+        project.set_config(self.config)
 
     def open_project(self):
         if self.config == "":

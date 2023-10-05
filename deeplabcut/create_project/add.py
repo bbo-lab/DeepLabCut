@@ -9,7 +9,6 @@
 # Licensed under GNU Lesser General Public License v3.0
 #
 
-
 def add_new_videos(
     config, videos, copy_videos=False, coords=None, extract_frames=False
 ):
@@ -51,7 +50,7 @@ def add_new_videos(
     import shutil
     from pathlib import Path
 
-    from deeplabcut.utils import auxiliaryfunctions
+    from deeplabcut.utils import auxiliaryfunctions, project
     from deeplabcut.utils.auxfun_videos import VideoReader
     from deeplabcut.generate_training_dataset import frame_extraction
 
@@ -72,20 +71,10 @@ def add_new_videos(
 
     destinations = [video_path.joinpath(vp.name) for vp in videos]
     if copy_videos:
+        print("Copying/linking the videos")
         for src, dst in zip(videos, destinations):
-            if dst.exists():
-                pass
-            else:
-                print("Copying the videos")
-                shutil.copy(os.fspath(src), os.fspath(dst))
-
-    else:
-        # creates the symlinks of the video and puts it in the videos directory.
-        print("Attempting to create a symbolic link of the video ...")
-        for src, dst in zip(videos, destinations):
-            if dst.exists():
-                print(f"Video {dst} already exists. Skipping...")
-                continue
+            if dst.exists() and not DEBUG:
+                raise FileExistsError("Video {} exists already!".format(dst))
             try:
                 src = str(src)
                 dst = str(dst)
@@ -97,13 +86,9 @@ def add_new_videos(
 
                     subprocess.check_call("mklink %s %s" % (dst, src), shell=True)
                 except (OSError, subprocess.CalledProcessError):
-                    print(
-                        "Symlink creation impossible (exFat architecture?): "
-                        "copying the video instead."
-                    )
-                    shutil.copy(os.fspath(src), os.fspath(dst))
-                    print("{} copied to {}".format(src, dst))
-            videos = destinations
+                    shutil.copy(
+                        os.fspath(src), os.fspath(dst)
+                    )  # https://www.python.org/dev/peps/pep-0519/
 
     if copy_videos:
         videos = destinations  # in this case the *new* location should be added to the config file

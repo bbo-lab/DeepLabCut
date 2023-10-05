@@ -51,9 +51,7 @@ def create_new_project(
         ``current working directory``.
 
     copy_videos : bool, optional, Default: False.
-        If True, the videos are copied to the ``videos`` directory. If False, symlinks
-        of the videos will be created in the ``project/videos`` directory; in the event
-        of a failure to create symbolic links, videos will be moved instead.
+        If True, the videos are linked or copied to the ``videos`` directory. 
 
     multianimal: bool, optional. Default: False.
         For creating a multi-animal project (introduced in DLC 2.2)
@@ -175,14 +173,7 @@ def create_new_project(
 
     destinations = [video_path.joinpath(vp.name) for vp in videos]
     if copy_videos:
-        print("Copying the videos")
-        for src, dst in zip(videos, destinations):
-            shutil.copy(
-                os.fspath(src), os.fspath(dst)
-            )  # https://www.python.org/dev/peps/pep-0519/
-    else:
-        # creates the symlinks of the video and puts it in the videos directory.
-        print("Attempting to create a symbolic link of the video ...")
+        print("Copying/linking the videos")
         for src, dst in zip(videos, destinations):
             if dst.exists() and not DEBUG:
                 raise FileExistsError("Video {} exists already!".format(dst))
@@ -197,13 +188,9 @@ def create_new_project(
 
                     subprocess.check_call("mklink %s %s" % (dst, src), shell=True)
                 except (OSError, subprocess.CalledProcessError):
-                    print(
-                        "Symlink creation impossible (exFat architecture?): "
-                        "copying the video instead."
-                    )
-                    shutil.copy(os.fspath(src), os.fspath(dst))
-                    print("{} copied to {}".format(src, dst))
-            videos = destinations
+                    shutil.copy(
+                        os.fspath(src), os.fspath(dst)
+                    )  # https://www.python.org/dev/peps/pep-0519/
 
     if copy_videos:
         videos = destinations  # in this case the *new* location should be added to the config file

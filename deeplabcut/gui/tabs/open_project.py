@@ -67,7 +67,6 @@ class OpenProject(QtWidgets.QDialog):
         self.config = config[0]
         self.open_line.setText(self.config)
         self.ok_button.setFocus()
-        project.set_config(self.config)
 
     def open_project(self):
         if self.config == "":

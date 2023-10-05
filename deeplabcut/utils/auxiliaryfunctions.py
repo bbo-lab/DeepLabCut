@@ -191,6 +191,7 @@ def read_config(configname):
                 if cfg["project_path"] != curr_dir:
                     cfg["project_path"] = curr_dir
                     write_config(configname, cfg)
+                os.chdir(curr_dir)
         except Exception as err:
             if len(err.args) > 2:
                 if (
@@ -298,6 +299,34 @@ def read_plainconfig(configname):
 def write_plainconfig(configname, cfg):
     with open(configname, "w") as file:
         YAML().dump(cfg, file)
+
+
+def relative_to_project(project_path, filename):
+    """
+    Convert a ''filename'' to a relative path with respect to the 
+    projects configuration file directory.
+    """
+    if isinstance(project_path, dict):
+        project_path = project_path['project-path']
+
+    prefix = Path('.')
+    suffix = filename
+
+    project_path = Path(project_path)
+    anchor = project_path.anchor
+
+    while project_path != anchor:
+        try:
+            suffix = Path(filename).relative_to(project_path)
+            break
+        except ValueError:
+            prefix = prefix / '..'
+            project_path = project_path.parent
+
+    if project_path == anchor:
+        return filename
+
+    return str(prefix / suffix)
 
 
 def attempt_to_make_folder(foldername, recursive=False):

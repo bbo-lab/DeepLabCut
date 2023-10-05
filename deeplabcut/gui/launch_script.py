@@ -64,7 +64,7 @@ def launch_dlc():
 
     window = MainWindow(app)
     window.receiver.start()
-    window.showMaximized()
+    window.show()
     splash.finish(window)
     sys.exit(app.exec_())
 

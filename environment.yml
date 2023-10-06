@@ -28,4 +28,4 @@ dependencies:
   - notebook<7.0.0
   - ffmpeg
   - pip:
-    - "git+https://github.com/bbo-lab/DeepLabCut.git@mpinb"
+    - "deeplabcut[gui,tf]@git+https://github.com/bbo-lab/DeepLabCut.git@mpinb"

@@ -101,6 +101,8 @@ def add_new_videos(
         except:
             video_path = os.readlink(video)
 
+        video_path = auxiliaryfunctions.relative_to_project(cfg['project_path'], video_path)
+
         vid = VideoReader(video_path)
         if coords is not None:
             c = coords[idx]

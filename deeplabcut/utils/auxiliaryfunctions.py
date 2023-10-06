@@ -187,7 +187,7 @@ def read_config(configname):
         try:
             with open(path, "r") as f:
                 cfg = ruamelFile.load(f)
-                curr_dir = os.path.dirname(configname)
+                curr_dir = str(Path.resolve(path.parent))
                 if cfg["project_path"] != curr_dir:
                     cfg["project_path"] = curr_dir
                     write_config(configname, cfg)

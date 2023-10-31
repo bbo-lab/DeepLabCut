@@ -1,0 +1,2 @@
+- output should go into a or the "results" folder
+- napari video image extraction goes into folder where the video lives

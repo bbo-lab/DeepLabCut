@@ -14,6 +14,7 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import Qt
 from deeplabcut.gui.dlc_params import DLCParams
 from deeplabcut.gui.widgets import ConfigEditor
+from deeplabcut.utils import auxiliaryfunctions
 
 
 def _create_label_widget(
@@ -164,7 +165,8 @@ class VideoSelectionWidget(QtWidgets.QWidget):
 
         if filenames[0]:
             # Qt returns a tuple (list of files, filetype)
-            self.root.video_files = [os.path.abspath(vid) for vid in filenames[0]]
+            self.root.video_files = [
+                auxiliaryfunctions.relative_to_project(os.getcwd(), os.path.abspath(vid)) for vid in filenames[0]]
 
     def clear_selected_videos(self):
         self.root.video_files = set()

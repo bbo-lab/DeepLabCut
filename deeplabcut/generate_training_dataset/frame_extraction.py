@@ -270,7 +270,7 @@ def extract_frames(
     if videos_list is None:
         videos = cfg.get("video_sets_original") or cfg["video_sets"]
     else:  # filter video_list by the ones in the config file
-        videos = [v for v in cfg["video_sets"] if auxiliaryfunctions.relative_to_project(cfg['project_path'], v) in videos_list]
+        videos = [v for v in cfg["video_sets"] if v in videos_list]
 
     if mode == "manual":
         from deeplabcut.gui.widgets import launch_napari

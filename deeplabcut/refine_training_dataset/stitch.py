@@ -606,6 +606,9 @@ class TrackletStitcher:
         return max_gap
 
     def mine(self, n_samples):
+        if not self._lu_overlap:
+            raise ValueError("No overlapping tracklets found.")
+
         p = np.asarray([t.likelihood for t in self])
         p /= p.sum()
         triplets = []
@@ -873,7 +876,7 @@ class TrackletStitcher:
             temp = np.full((self.n_frames, flat_data.shape[1]), np.nan)
             temp[track.inds - self._first_frame] = flat_data
             data.append(temp)
-        
+
         # If there isn't a track for each animal, fill in the dataframe with NaNs
         missing_tracks = self.n_tracks - len(self.tracks)
         if missing_tracks > 0:

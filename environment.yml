@@ -13,12 +13,11 @@
 #
 # AFTER THIS FILE IS INSTALLED, if you have a GPU be sure to install `conda forge cudnn`
 #
-# + export LD_LIBRARY_PATH
-#
 # install: conda env create -f environment.yml
 #          conda env create --file https://raw.githubusercontent.com/bbo-lab/DeepLabCut/mpinb/environment.yml
 # update:  conda env update -f environment.yml
 #
+# after activation of the environment, run conda-environments/postinst.sh
 #
 name: dlc2mpinb
 channels:

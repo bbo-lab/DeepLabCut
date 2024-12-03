@@ -1,0 +1,4 @@
+#!/bin/sh
+
+export LD_LIBRARY_PATH="$CONDA_LD_LIBRARY_PATH"
+unset CONDA_LD_LIBRARY_PATH
